@@ -78,7 +78,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -119,7 +118,6 @@ namespace sqlpp
     {
       using _data_t = having_data_t<Database, Expression>;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       template <typename... Args>
       _base_t(Args&&... args) : having{std::forward<Args>(args)...}
       {
@@ -181,12 +179,6 @@ namespace sqlpp
       static_check_t<not std::is_same<Database, void>::value, assert_having_dynamic_statement_dynamic_t>,
       check_having_t<Expression>>;
 
-  template <typename... Exprs>
-  constexpr auto are_all_parameters_expressions() -> bool
-  {
-    return logic::all_t<is_expression_t<Exprs>::value...>::value;
-  }
-
   // NO HAVING YET
   struct no_having_t
   {
@@ -200,7 +192,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -215,7 +206,6 @@ namespace sqlpp
     {
       using _data_t = no_data_t;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       template <typename... Args>
       _base_t(Args&&... args) : no_having{std::forward<Args>(args)...}
       {
@@ -239,13 +229,8 @@ namespace sqlpp
 
       using _database_t = typename Policies::_database_t;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
-      //	  template <typename... T>
-      //	  using _check = logic::all_t<is_expression_t<T>::value...>;
       template <typename... T>
-      struct _check : std::integral_constant<bool, are_all_parameters_expressions<T...>()>
-      {
-      };
+      using _check = logic::all_t<is_expression_t<T>::value...>;
 
       template <typename Check, typename T>
       using _new_statement_t = new_statement_t<Check, Policies, no_having_t, T>;

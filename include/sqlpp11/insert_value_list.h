@@ -79,7 +79,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -94,7 +93,6 @@ namespace sqlpp
     {
       using _data_t = insert_default_values_data_t;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       template <typename... Args>
       _base_t(Args&&... args) : default_values{std::forward<Args>(args)...}
       {
@@ -155,60 +153,30 @@ namespace sqlpp
   SQLPP_PORTABLE_STATIC_ASSERT(assert_insert_dynamic_set_statement_dynamic_t,
                                "dynamic_set must not be called in a static statement");
 
-  // workaround for msvc bugs https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269 &
-  // https://connect.microsoft.com/VisualStudio/Feedback/Details/2173198
-  //  template <typename... Assignments>
-  //  using check_insert_set_t = static_combined_check_t<
-  //      static_check_t<logic::all_t<is_assignment_t<Assignments>::value...>::value, assert_insert_set_assignments_t>,
-  //      static_check_t<not detail::has_duplicates<lhs_t<Assignments>...>::value, assert_insert_set_no_duplicates_t>,
-  //      static_check_t<logic::none_t<must_not_insert_t<lhs_t<Assignments>>::value...>::value,
-  //                     assert_insert_set_allowed_t>,
-  //      static_check_t<sizeof...(Assignments) == 0 or
-  //                         detail::make_joined_set_t<required_tables_of<lhs_t<Assignments>>...>::size::value == 1,
-  //                     assert_insert_set_single_table_t>>;
-
-  template <typename Expr>
-  struct must_not_insert
-  {
-    static const bool value = must_not_insert_t<lhs_t<Expr>>::value;
-  };
-
   template <typename... Assignments>
   using check_insert_set_t = static_combined_check_t<
       static_check_t<logic::all_t<detail::is_assignment_impl<Assignments>::type::value...>::value,
                      assert_insert_set_assignments_t>,
-      static_check_t<not detail::has_duplicates<typename lhs<Assignments>::type...>::value,
-                     assert_insert_set_no_duplicates_t>,
-      static_check_t<logic::none_t<must_not_insert<Assignments>::value...>::value, assert_insert_set_allowed_t>,
-      static_check_t<sizeof...(Assignments) == 0 or detail::make_joined_set_t<required_tables_of<
-                                                        typename lhs<Assignments>::type>...>::size::value == 1,
+      static_check_t<not detail::has_duplicates<lhs_t<Assignments>...>::value, assert_insert_set_no_duplicates_t>,
+      static_check_t<logic::none_t<must_not_insert_t<lhs_t<Assignments>>::value...>::value,
+                     assert_insert_set_allowed_t>,
+      static_check_t<sizeof...(Assignments) == 0 or
+                         detail::make_joined_set_t<required_tables_of<lhs_t<Assignments>>...>::size::value == 1,
                      assert_insert_set_single_table_t>>;
 
-  // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
-  //  template <typename... Assignments>
-  //  using check_insert_static_set_t =
-  //      static_combined_check_t<check_insert_set_t<Assignments...>,
-  //                              static_check_t<sizeof...(Assignments) != 0, assert_insert_static_set_count_args_t>,
-  //                              static_check_t<detail::have_all_required_columns<lhs_t<Assignments>...>::value,
-  //                                             assert_insert_static_set_all_required_t>>;
   template <typename... Assignments>
   struct check_insert_static_set
   {
-    using type = static_combined_check_t<
-        check_insert_set_t<Assignments...>,
-        static_check_t<sizeof...(Assignments) != 0, assert_insert_static_set_count_args_t>,
-        static_check_t<detail::have_all_required_columns<typename lhs<Assignments>::type...>::value,
-                       assert_insert_static_set_all_required_t>>;
+    using type =
+        static_combined_check_t<check_insert_set_t<Assignments...>,
+                                static_check_t<sizeof...(Assignments) != 0, assert_insert_static_set_count_args_t>,
+                                static_check_t<detail::have_all_required_columns<lhs_t<Assignments>...>::value,
+                                               assert_insert_static_set_all_required_t>>;
   };
 
   template <typename... Assignments>
   using check_insert_static_set_t = typename check_insert_static_set<Assignments...>::type;
 
-  // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
-  //  template <typename Database, typename... Assignments>
-  //  using check_insert_dynamic_set_t = static_combined_check_t<
-  //      static_check_t<not std::is_same<Database, void>::value, assert_insert_dynamic_set_statement_dynamic_t>,
-  //      check_insert_set_t<Assignments...>>;
   template <typename Database, typename... Assignments>
   struct check_insert_dynamic_set
   {
@@ -244,7 +212,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -290,7 +257,6 @@ namespace sqlpp
     {
       using _data_t = insert_list_data_t<Database, Assignments...>;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       template <typename... Args>
       _base_t(Args&&... args) : insert_list{std::forward<Args>(args)...}
       {
@@ -321,7 +287,6 @@ namespace sqlpp
   template <typename... Columns>
   struct column_list_data_t
   {
-    // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
     column_list_data_t(Columns... cols) : _columns(simple_column_t<Columns>(cols)...)
     {
     }
@@ -355,7 +320,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -395,7 +359,6 @@ namespace sqlpp
     {
       using _data_t = column_list_data_t<Columns...>;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       template <typename... Args>
       _base_t(Args&&... args) : values{std::forward<Args>(args)...}
       {
@@ -448,7 +411,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -463,7 +425,6 @@ namespace sqlpp
     {
       using _data_t = no_data_t;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       template <typename... Args>
       _base_t(Args&&... args) : no_insert_values{std::forward<Args>(args)...}
       {

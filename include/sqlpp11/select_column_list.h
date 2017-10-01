@@ -116,7 +116,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -163,7 +162,6 @@ namespace sqlpp
     {
       using _data_t = select_column_list_data_t<Database, Columns...>;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       template <typename... Args>
       _base_t(Args&&... args) : selected_columns{std::forward<Args>(args)...}
       {
@@ -328,7 +326,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -343,7 +340,6 @@ namespace sqlpp
     {
       using _data_t = no_data_t;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       template <typename... Args>
       _base_t(Args&&... args) : no_selected_columns{std::forward<Args>(args)...}
       {

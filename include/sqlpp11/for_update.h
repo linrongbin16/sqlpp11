@@ -51,7 +51,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -66,7 +65,6 @@ namespace sqlpp
     {
       using _data_t = for_update_data_t;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       template <typename... Args>
       _base_t(Args&&... args) : for_update{std::forward<Args>(args)...}
       {
@@ -104,7 +102,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -119,7 +116,6 @@ namespace sqlpp
     {
       using _data_t = no_data_t;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       template <typename... Args>
       _base_t(Args&&... args) : no_for_update{std::forward<Args>(args)...}
       {

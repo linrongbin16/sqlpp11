@@ -236,16 +236,8 @@ namespace sqlpp
     };
   }  // namespace detail
 
-  // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2086629
-  template <typename Expr>
-  using lhs = detail::lhs_impl<Expr>;
-
   template <typename Expr>
   using lhs_t = typename detail::lhs_impl<Expr>::type;
-
-  // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2086629
-  template <typename Expr>
-  using rhs = detail::rhs_impl<Expr>;
 
   template <typename Expr>
   using rhs_t = typename detail::rhs_impl<Expr>::type;

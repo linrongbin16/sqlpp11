@@ -77,7 +77,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -121,7 +120,6 @@ namespace sqlpp
     {
       using _data_t = where_data_t<Database, Expression>;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       template <typename... Args>
       _base_t(Args&&... args) : where{std::forward<Args>(args)...}
       {
@@ -168,7 +166,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -183,7 +180,6 @@ namespace sqlpp
     {
       using _data_t = where_data_t<void, unconditional_t>;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       template <typename... Args>
       _base_t(Args&&... args) : where{std::forward<Args>(args)...}
       {
@@ -222,18 +218,6 @@ namespace sqlpp
   SQLPP_PORTABLE_STATIC_ASSERT(assert_where_dynamic_used_with_dynamic_statement_t,
                                "dynamic_where() must not be called in a static statement");
 
-  // workaround for msvc bugs https://connect.microsoft.com/VisualStudio/Feedback/Details/2086629 &
-  // https://connect.microsoft.com/VisualStudio/feedback/details/2173198
-  //  template <typename... Expressions>
-  //  using check_where_t = static_combined_check_t<
-  //      static_check_t<logic::all_t<is_not_cpp_bool_t<Expressions>::value...>::value,
-  //      assert_where_arg_is_not_cpp_bool_t>,
-  //      static_check_t<logic::all_t<is_expression_t<Expressions>::value...>::value,
-  //      assert_where_boolean_expressions_t>,
-  //      static_check_t<logic::all_t<is_boolean_t<Expressions>::value...>::value,
-  //      assert_where_arg_is_boolean_expression_t>,
-  //      static_check_t<logic::all_t<(not contains_aggregate_function_t<Expressions>::value)...>::value,
-  //                     assert_where_arg_contains_no_aggregate_functions_t>>;
   template <typename Expression>
   struct check_where
   {
@@ -270,7 +254,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -285,7 +268,6 @@ namespace sqlpp
     {
       using _data_t = no_data_t;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       template <typename... Args>
       _base_t(Args&&... args) : no_where{std::forward<Args>(args)...}
       {

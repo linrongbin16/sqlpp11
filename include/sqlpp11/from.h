@@ -71,11 +71,9 @@ namespace sqlpp
   struct check_from_add
   {
     using _known_tables = provided_tables_of<typename From::_table_t>;  // Hint: Joins contain more than one table
-    // workaround for msvc bug https://connect.microsoft.com/VisualStudio/feedback/details/2173198
-    //		using _known_table_names = detail::transform_set_t<name_of, _known_tables>;
-    using _known_table_names = detail::make_name_of_set_t<_known_tables>;
+    using _known_table_names = detail::transform_set_t<name_of, _known_tables>;
     using _joined_tables = provided_tables_of<DynamicJoin>;
-    using _joined_table_names = detail::make_name_of_set_t<_joined_tables>;
+    using _joined_table_names = detail::transform_set_t<name_of, _joined_tables>;
     using _required_tables = required_tables_of<DynamicJoin>;
     using type = static_combined_check_t<
         static_check_t<From::_is_dynamic::value, assert_from_add_dynamic>,
@@ -109,7 +107,6 @@ namespace sqlpp
       using _is_dynamic = is_database<_database_t>;
       using _table_t = Table;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -143,7 +140,6 @@ namespace sqlpp
     {
       using _data_t = from_data_t<Database, Table>;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       template <typename... Args>
       _base_t(Args&&... args) : from{std::forward<Args>(args)...}
       {
@@ -188,7 +184,7 @@ namespace sqlpp
         static_check_t<is_table_t<Table>::value, assert_from_table_t>,
         static_check_t<required_tables_of<Table>::size::value == 0, assert_from_dependency_free_t>,
         static_check_t<provided_tables_of<Table>::size::value ==
-                           detail::make_name_of_set_t<provided_tables_of<Table>>::size::value,
+                           detail::transform_set_t<name_of, provided_tables_of<Table>>::size::value,
                        assert_from_no_duplicates_t>>;
   };
 
@@ -215,7 +211,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -230,7 +225,6 @@ namespace sqlpp
     {
       using _data_t = no_data_t;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2091069
       template <typename... Args>
       _base_t(Args&&... args) : no_from{std::forward<Args>(args)...}
       {

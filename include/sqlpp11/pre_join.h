@@ -45,8 +45,8 @@ namespace sqlpp
         static_check_t<is_table_t<Lhs>::value, assert_pre_join_lhs_table_t>,
         static_check_t<is_table_t<Rhs>::value, assert_pre_join_rhs_table_t>,
         static_check_t<not is_join_t<Rhs>::value, assert_pre_join_rhs_no_join_t>,
-        static_check_t<detail::is_disjunct_from<detail::make_name_of_set_t<provided_tables_of<Lhs>>,
-                                                detail::make_name_of_set_t<provided_tables_of<Rhs>>>::value,
+        static_check_t<detail::is_disjunct_from<detail::transform_set_t<name_of, provided_tables_of<Lhs>>,
+                                                detail::transform_set_t<name_of, provided_tables_of<Rhs>>>::value,
                        assert_pre_join_unique_names_t>>;
   };
 

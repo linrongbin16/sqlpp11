@@ -71,7 +71,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -116,7 +115,6 @@ namespace sqlpp
     {
       using _data_t = update_list_data_t<Database, Assignments...>;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       template <typename... Args>
       _base_t(Args&&... args) : assignments{std::forward<Args>(args)...}
       {
@@ -160,7 +158,7 @@ namespace sqlpp
     template <typename Assignment>
     struct lhs_must_not_update
     {
-      static constexpr auto value = detail::must_not_update_impl<typename lhs<Assignment>::type>::type::value;
+      static constexpr auto value = detail::must_not_update_impl<lhs_t<Assignment>>::type::value;
     };
   }  // namespace detail
 
@@ -168,12 +166,11 @@ namespace sqlpp
   using check_update_set_t = static_combined_check_t<
       static_check_t<logic::all_t<detail::is_assignment_impl<Assignments>::type::value...>::value,
                      assert_update_set_assignments_t>,
-      static_check_t<not detail::has_duplicates<typename lhs<Assignments>::type...>::value,
-                     assert_update_set_no_duplicates_t>,
+      static_check_t<not detail::has_duplicates<lhs_t<Assignments>...>::value, assert_update_set_no_duplicates_t>,
       static_check_t<logic::none_t<detail::lhs_must_not_update<Assignments>::value...>::value,
                      assert_update_set_allowed_t>,
-      static_check_t<sizeof...(Assignments) == 0 or detail::make_joined_set_t<required_tables_of<
-                                                        typename lhs<Assignments>::type>...>::size::value == 1,
+      static_check_t<sizeof...(Assignments) == 0 or
+                         detail::make_joined_set_t<required_tables_of<lhs_t<Assignments>>...>::size::value == 1,
                      assert_update_set_single_table_t>>;
 
   template <typename... Assignments>
@@ -209,7 +206,6 @@ namespace sqlpp
     template <typename Policies>
     struct _impl_t
     {
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       _impl_t() = default;
       _impl_t(const _data_t& data) : _data(data)
       {
@@ -224,7 +220,6 @@ namespace sqlpp
     {
       using _data_t = no_data_t;
 
-      // workaround for msvc bug https://connect.microsoft.com/VisualStudio/Feedback/Details/2173269
       template <typename... Args>
       _base_t(Args&&... args) : no_assignments{std::forward<Args>(args)...}
       {
