@@ -5,6 +5,9 @@ os:
 platform:
   - x64
 
+services:
+  - mysql
+
 configuration:
   #- Debug
   - Release
@@ -13,19 +16,15 @@ matrix:
   fast_finish: true
 
 build_script:
-  - CD
-  - cd ..
-  - CD
-  - git clone https://github.com/HowardHinnant/date
-  - cd date
-  - git checkout tags/v2.4
-  - cd ..
-  - cd sqlpp11
+  - SET PATH=%PATH%;C:\Program Files\MySQL\MySQL Server 5.7\bin
+  - set MYSQL_PWD=Password12!
+  - SET
+  - mysql -e "create database sqlpp_mysql;" --user=root
   - CD
   - echo %configuration%
   - mkdir build
   - cd build
   - cmake --version
-  - cmake .. -DCMAKE_CXX_FLAGS="/EHsc /wd4503" -DCMAKE_PREFIX_PATH="C:\projects\date"
+  - cmake .. -DMYSQL_CONNECTOR=ON -DCMAKE_CXX_FLAGS="/EHsc /wd4503" -DCMAKE_PREFIX_PATH="C:\projects\date"
   - cmake --build . --config %configuration%
   - ctest . --build-config %configuration%
