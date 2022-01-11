@@ -20,5 +20,7 @@ The following pages will tell you how to use it:
 * [Remove](Remove.md)
 * [Functions](Functions.md)
 * [Prepared Statements](Prepared-Statements.md)
+* [Transactions](Transactions.md)
+* [Thread Safety](Threads.md)
 * [NULL](NULL.md)
 * [New Features](New-Features.md)
